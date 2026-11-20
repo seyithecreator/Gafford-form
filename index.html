@@ -29,6 +29,26 @@ th{background:#d99a1c;text-align:left}
 canvas.sig{border-bottom:1px solid #333;background:#fff;width:260px;height:70px;touch-action:none;display:block}
 .exp .no{visibility:hidden}
 .red{color:#9b1c1c}
+.mh,.mf{display:none}
+body{-webkit-text-size-adjust:100%}
+.mob .wrap{padding:0}
+.mob .page{width:100%;height:auto;margin:0 0 10px;padding:0 14px 14px;background:#fff6ce;box-shadow:none;overflow:visible}
+.mob .mh{display:block;margin:0 -14px 10px;padding-top:22.6%;background:var(--bg) top/100% auto no-repeat}
+.mob .mf{display:block;margin:14px -14px -14px;padding-top:13%;background:var(--bg) bottom/100% auto no-repeat}
+.mob .photo{position:static;margin:0 0 8px auto}
+.mob .r{flex-direction:column;align-items:stretch;gap:10px;margin:10px 0}
+.mob .f{flex:none!important;width:100%;flex-direction:column;align-items:stretch;gap:3px}
+.mob .f input{height:38px;font-size:16px;border:1px solid #aaa;border-radius:6px;padding:4px 8px;background:#fff}
+.mob .c{gap:6px 8px}.mob .c b{width:100%}
+.mob .o{padding:8px 10px;border:1px solid #bbb;border-radius:6px;background:#fff;font-size:14px}
+.mob .k{width:20px;height:20px;line-height:19px;font-size:15px}
+.mob .h{margin-top:14px;font-size:14px}
+.mob .box{flex-direction:column!important;align-items:stretch!important;height:auto!important;gap:10px}
+.mob canvas.sig{width:100%;height:110px}
+.mob textarea{font-size:16px;height:110px!important}
+.mob table{width:100%}
+.mob p input{width:100%!important;display:block;margin:4px 0;height:38px;font-size:16px;border:1px solid #aaa!important;border-radius:6px}
+.mob .bar button{flex:1;padding:12px 6px;font-size:14px}.mob #st:empty{display:none}
 </style></head><body>
 <div class="bar">
 <button onclick="pdf()">Download PDF</button><button onclick="word()">Download Word</button>
@@ -52,7 +72,7 @@ canvas.sig{border-bottom:1px solid #333;background:#fff;width:260px;height:70px;
 <div class="f" style="flex:0 0 220px"><b>Date:</b><input data-l="Signature date"></div></div>
 <div style="background:#fff;border:1px solid #888;padding:6px;margin:8px 0"><div class="red" style="margin:0 0 6px;padding:0"><p style="margin:0 0 4px">Note: All payment transactions must be paid into our designated company’s bank account in favour of Gafford Property and Homes.</p><p style="margin:0">Gafford Property and Homes will not be liable for any payment not made directly into any of our designated bank accounts.</p></div>
 <div style="padding:2px"><div class="h" style="margin:0 0 6px">ACCOUNT DETAILS</div><div class="h" style="margin:0 0 6px">NAME: GAFFORD PROPERTY AND HOME LTD</div>
-<table><tr><th>BANK NAME</th><th>ACCOUNT NO</th></tr><tr><td>ZENITH BANK</td><td>1225428565</td></tr><tr><td>PROVIDUS BANK</td><td>5401541242</td></tr><tr><td>UNION BANK</td><td>0171811488</td></tr><tr><td>POLARIS BANK</td><td>4091896134</td></tr></table></div></div>
+<table><tr><th>BANK NAME</th><th>ACCOUNT NO</th></tr><tr><td>ZENITH BANK</td><td>1225428565</td></tr><tr><td>POLARIS BANK</td><td>4091896134</td></tr></table></div></div>
 <div class="h" style="margin-top:14px">Terms and Conditions:</div><ul style="margin:4px 0"><li>No administrative charges</li><li>No hidden charges</li></ul>
 <hr style="border:0;border-top:2px dotted #333">
 <div class="h">OFFICIAL USE</div>
@@ -91,9 +111,9 @@ cv.onpointermove=e=>{if(dr){cx.lineTo(...pt(e));cx.stroke()}};cv.onpointerup=()=
 function clr(){cx.clearRect(0,0,cv.width,cv.height);signed=0}
 async function sup(i){const im=new Image;im.onload=()=>{clr();const s=Math.min(cv.width/im.width,cv.height/im.height);cx.drawImage(im,0,0,im.width*s,im.height*s);signed=1};im.src=await rd(i.files[0])}
 const say=t=>st.textContent=t;
-async function pdf(){say('Building PDF…');document.body.classList.add('exp');const {jsPDF}=window.jspdf,d=new jsPDF('p','mm','a4');
-for(const[i,p]of[p1,p2].entries()){const c=await html2canvas(p,{scale:3,useCORS:true});if(i)d.addPage();d.addImage(c.toDataURL('image/jpeg',.95),'JPEG',0,0,210,297)}
-document.body.classList.remove('exp');d.save('Gafford_Subscriber_Form.pdf');say('')}
+async function pdf(){say('Building PDF…');const mob=document.body.classList.contains('mob');document.body.classList.remove('mob');document.body.classList.add('exp');scrollTo(0,0);document.querySelector('.wrap').scrollLeft=0;await new Promise(r=>setTimeout(r,80));const {jsPDF}=window.jspdf,d=new jsPDF('p','mm','a4');
+for(const[i,p]of[p1,p2].entries()){const c=await html2canvas(p,{scale:mob?2:3,useCORS:true,windowWidth:900});if(i)d.addPage();d.addImage(c.toDataURL('image/jpeg',.95),'JPEG',0,0,210,297)}
+document.body.classList.remove('exp');if(mob)document.body.classList.add('mob');d.save('Gafford_Subscriber_Form.pdf');say('')}
 const u8=d=>Uint8Array.from(atob(d.split(',')[1]),c=>c.charCodeAt(0));
 const load=s=>new Promise(r=>{const i=new Image;i.onload=()=>r(i);i.src=s});
 async function word(){say('Building Word…');const D=docx,PX=9525,DX=D.WidthType.DXA,W=10400,
@@ -127,7 +147,7 @@ kids.push(ph([tx('I '),tx(nm,{underline:{}}),tx(' hereby attest that the informa
 ph([tx('I accept that any default in my agreed payment terms may either result in the cancellation of the subscription and will warrant a charge on pro-rata basis on the interest accrued')]));
 const sg=signed?[new D.ImageRun({data:u8(cv.toDataURL('image/png')),transformation:{width:180,height:48}})]:[];
 const bc=(w,ch)=>new D.TableCell({width:{size:w,type:DX},borders:GB,shading:WH,children:ch});
-const red={color:'9B1C1C'},bank=new D.Table({width:{size:6000,type:DX},columnWidths:[3000,3000],rows:[['BANK NAME','ACCOUNT NO'],['ZENITH BANK','1225428565'],['PROVIDUS BANK','5401541242'],['UNION BANK','0171811488'],['POLARIS BANK','4091896134']].map((r,i)=>new D.TableRow({children:r.map(t=>new D.TableCell({width:{size:3000,type:DX},shading:{type:D.ShadingType.CLEAR,fill:i?'F2C46D':'D99A1C',color:'auto'},children:[ph([tx(t,{bold:true})])]}))}))});
+const red={color:'9B1C1C'},bank=new D.Table({width:{size:6000,type:DX},columnWidths:[3000,3000],rows:[['BANK NAME','ACCOUNT NO'],['ZENITH BANK','1225428565'],['POLARIS BANK','4091896134']].map((r,i)=>new D.TableRow({children:r.map(t=>new D.TableCell({width:{size:3000,type:DX},shading:{type:D.ShadingType.CLEAR,fill:i?'F2C46D':'D99A1C',color:'auto'},children:[ph([tx(t,{bold:true})])]}))}))});
 kids.push(new D.Table({width:{size:W,type:DX},columnWidths:[6200,4200],rows:[new D.TableRow({height:{value:1300,rule:D.HeightRule.ATLEAST},children:[bc(6200,[new D.Paragraph({children:sg}),ph([tx('Signature:',{bold:true})])]),bc(4200,[ph([tx('Date: ',{bold:true}),tx(q('Signature date'))])])]})]}),gap(),
 new D.Table({width:{size:W,type:DX},columnWidths:[W],rows:[new D.TableRow({children:[bc(W,[
 ph([tx('Note: All payment transactions must be paid into our designated company’s bank account in favour of Gafford Property and Homes.',red)]),
@@ -140,4 +160,6 @@ new D.Table({width:{size:W,type:DX},columnWidths:[W],rows:[new D.TableRow({heigh
 const bgp=new D.Paragraph({children:[new D.ImageRun({data:u8(src),transformation:{width:794,height:1123},floating:{horizontalPosition:{relative:D.HorizontalPositionRelativeFrom.PAGE,offset:0},verticalPosition:{relative:D.VerticalPositionRelativeFrom.PAGE,offset:0},behindDocument:true,allowOverlap:true,wrap:{type:D.TextWrappingType.NONE}}})]});
 const doc=new D.Document({styles:{default:{document:{run:{font:F('Arial'),size:19}}}},sections:[{properties:{page:{margin:{top:2670,bottom:1200,left:750,right:750,header:0,footer:0}}},headers:{default:new D.Header({children:[bgp]})},children:kids}]});
 const blob=await D.Packer.toBlob(doc),l=document.createElement('a');l.href=URL.createObjectURL(blob);l.download='Gafford_Subscriber_Form.docx';l.click();say('')}
+const mq=()=>document.body.classList.toggle('mob',innerWidth<820);mq();addEventListener('resize',mq);
+document.querySelectorAll('.page').forEach(p=>{p.insertAdjacentHTML('afterbegin','<div class="mh"></div>');p.insertAdjacentHTML('beforeend','<div class="mf"></div>')});
 </script></body></html>
